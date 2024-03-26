@@ -27,11 +27,11 @@ Although I am an Opentrons employee, this is not an official Opentrons product, 
 3. Run:
 
    ```
-   docker \
+   docker run
        -v /path-to-your-data:/data \
        --privileged \
        --pull=never \
-       ot2-sd-extract \
+       ot2-sd-extract
    ```
 
    Replace `/path-to-your-data` with the absolute path to the directory that you created, containing `sd.img`.
