@@ -104,6 +104,13 @@ def extract_stuff(mount_point: pathlib.Path, dest_dir: pathlib.Path) -> None:
                 )
 
     try:
+        # /data and /var/data on a fully-mounted OT-2,
+        # /data when looking at the partition on its own.
+        shutil.copytree(mount_point / "data", dest_dir / "data")
+    except Exception:
+        pass
+
+    try:
         # /var/machine-info on a fully-mounted OT-2,
         # /machine-info when looking at the partition on its own.
         shutil.copy(mount_point / "machine-info", dest_dir / "machine-info")
