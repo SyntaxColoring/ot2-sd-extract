@@ -142,8 +142,6 @@ def main():
         print(e.stderr.decode(), file=sys.stderr)
         return 1
 
-    # This lets us use MOUNT_POINT as the root directory for journalctl --root purposes.
-
     partitions = image_info["disk"]["partitions"]
     mounted_any = False
     for partition in partitions:
