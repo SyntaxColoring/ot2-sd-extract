@@ -11,9 +11,6 @@ import tempfile
 DATA_DIR = pathlib.Path("/data")
 """Where we're reading/writing files to communicate with the host."""
 
-IMAGE_FILE = DATA_DIR / "sd.img"
-"""This program's input file."""
-
 MOUNT_POINT = pathlib.Path("/mnt")
 
 
@@ -131,14 +128,23 @@ def extract_stuff(mount_point: pathlib.Path, dest_dir: pathlib.Path) -> None:
 
 
 def main():
-    if not IMAGE_FILE.exists():
-        print(f"Error: Forgot to provide {IMAGE_FILE.name}?", file=sys.stderr)
+    image_files = list(DATA_DIR.glob("*.img"))
+    if len(image_files) == 0:
+        print("Error: Forgot to provide .img file?", file=sys.stderr)
+        return 1
+    elif len(image_files) > 1:
+        print(
+            "Error: Multiple image files: " + ", ".join(f.name for f in image_files),
+            file=sys.stderr,
+        )
         return 1
 
+    image_file = image_files[0]
+
     try:
-        image_info = get_image_info(IMAGE_FILE)
+        image_info = get_image_info(image_file)
     except subprocess.CalledProcessError as e:
-        print(f"Error getting partition info from {IMAGE_FILE.name}.", file=sys.stderr)
+        print(f"Error getting partition info from {image_file.name}.", file=sys.stderr)
         print(e.stderr.decode(), file=sys.stderr)
         return 1
 
@@ -148,7 +154,7 @@ def main():
         number = partition["number"]
         offset = offset_of_partition(partition)
         try:
-            mount(IMAGE_FILE, offset, MOUNT_POINT)
+            mount(image_file, offset, MOUNT_POINT)
         except subprocess.CalledProcessError as e:
             print(f"Couldn't mount partition {number}. Ignoring it.")
             print(e.stderr.decode())

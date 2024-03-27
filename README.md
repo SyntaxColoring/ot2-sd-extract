@@ -22,7 +22,7 @@ Although I am an Opentrons employee, this is not an official Opentrons product, 
 
 1. Create an empty directory somewhere.
 
-2. Place your SD card image inside it. It must be named `sd.img`.
+2. Place your SD card image inside it. It must end in `.img`.
 
 3. Run:
 
